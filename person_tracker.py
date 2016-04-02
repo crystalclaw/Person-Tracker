@@ -2,5 +2,7 @@
 # AUTHOR:   Ian Drobney
 # DATE:     3/24/2016
 
-# Main file to execute here. Fill with tie-in and main launch stuff.
-pass
+import text_ui
+
+# Main launcher file. For the time being, sets the GUI type
+text_ui.main_menu()

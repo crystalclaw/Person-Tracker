@@ -2,8 +2,8 @@
 # AUTHOR:   Ian Drobney
 # DATE:     3/24/2016
 
-# This module is just for defining first-run defaults for creating default
-# files. In a seperate place so it's easier to read and examine.
+# This module is just for defining defaults for things, such as inital files
+# and static menus, in a seperate place so it's easier to read and examine.
 
 index = {
     'template': 'template.pickle',
@@ -32,3 +32,12 @@ fields = {
     },
     'nicks': {}
 }
+
+# Main menu options
+init_menu = [
+    'Show all',
+    'New',
+    'Search',
+    'Edit Defaults',
+    'Exit'
+]
