@@ -4,6 +4,7 @@
 
 # This module handles all of the data access and most in-memory storage
 
+import os
 import storage
 
 # The index data is loaded into this variable
@@ -24,12 +25,15 @@ data = {}
 # TODO(crystalclaw): possibly change how this is handled (a file location
 # handling function?) and test it to make sure it works with everything
 location = ''
+storage_name = 'ptinfo'
 
 
 # set the current working location
-def set_location(loc):
+def set_location(loc, name):
     global location
+    global storage_name
     location = loc
+    storage_name = name
 
 
 # pretty much a reload/init function; probably won't call this much after
@@ -37,8 +41,12 @@ def set_location(loc):
 def load_main():
     global index
     global template
-    index = storage.load_file(location + 'index.pickle')
-    template = storage.load_file(location + index['template'])
+    if not os.path.exists(location + storage_name):
+        storage.create_file_structure(location=location, name=storage_name)
+    index = storage.load_file(location + storage_name + '/' +
+                              'index.pickle')
+    template = storage.load_file(location + storage_name + '/' +
+                                 index['template'])
 
 
 # write everything to disk, except when certain critical data is missing.
@@ -49,15 +57,17 @@ def save_all():
     # check if the index is empty; if it is, don't save it or anything else.
     # It was probably cleared accidentally, and should never be empty.
     if index is not None:
-        storage.save_file(index, location + 'index.pickle')
+        storage.save_file(index, location +
+                          storage_name + '/' + 'index.pickle')
         # same for the template
         if template is not None:
-            storage.save_file(template, location + index['template'])
+            storage.save_file(template, location +
+                              storage_name + '/' + index['template'])
         # don't bother saving nothing.
         if not len(data) == 0:
             for i in data.keys():
-                storage.save_file(data[i], location + 'data/'
-                                  + str(i) + '.pickle')
+                storage.save_file(data[i], location + storage_name +
+                                  '/' + 'data/' + str(i) + '.pickle')
 
 
 # add a field to the template
@@ -68,6 +78,19 @@ def new_field(field_name):
     global template
     template[field_name] = ''
     save_all()
+
+
+def get_index():
+    return index
+
+
+def modify_index(index_in):
+    global index
+    index = index_in
+
+
+def save_index():
+    storage.save_file(index, location + storage_name + 'index.pickle')
 
 
 # add a new record to the system.
@@ -82,7 +105,7 @@ def new_record(Name):
         'file': str(data_out['uuid'] + '.pickle')
     }
     # make the new record, just to be safe
-    storage.save_file(data_out, location + 'data/' +
+    storage.save_file(data_out, location + storage_name + '/' + 'data/' +
                       str(data_out['uuid']) + '.pickle')
     # add the record to the in-memory data
     data[data_out['uuid']] = data_out

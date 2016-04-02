@@ -38,6 +38,6 @@ init_menu = [
     'Show all',
     'New',
     'Search',
-    'Edit Defaults',
+    'Edit Fields',
     'Exit'
 ]
