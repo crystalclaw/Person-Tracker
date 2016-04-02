@@ -7,6 +7,7 @@ Data is stored in pickled dictionaries, one per file, in the following structure
 }`
 The UUID is not stored in the file, but is the file's name.
 The file structure is as follows:
+```
 -/
   -index.pickle
     this file is loaded first, and points to every record in the system. It also
@@ -22,4 +23,6 @@ The file structure is as follows:
     -2.pickle
     ...
     -n.pickle
-    This folder contains each person's profile, one per file.
+  ```
+
+This folder contains each person's profile, one per file.
